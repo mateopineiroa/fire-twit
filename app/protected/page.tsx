@@ -11,7 +11,7 @@ export default async function Protected() {
       },
     });
     data = await res.json();
-    console.log(data);
+    // console.log(data);
   } catch (err) {
     console.log("get session data in server component error", err);
   }
