@@ -37,6 +37,7 @@ export async function POST(request: NextRequest, response: NextResponse) {
 export async function GET(request: NextRequest) {
   const session = cookies().get("session")?.value || "";
 
+  console.log({ session });
   //Validate if the cookie exist in the request
   if (!session) {
     return NextResponse.json({ isLogged: false }, { status: 401 }); // TODO: this response can redirect the user in this case
@@ -44,7 +45,6 @@ export async function GET(request: NextRequest) {
 
   //Use Firebase Admin to validate the session cookie
   const decodedClaims = await auth().verifySessionCookie(session, true); // The session data
-
   if (!decodedClaims) {
     return NextResponse.json({ isLogged: false }, { status: 401 });
   }
