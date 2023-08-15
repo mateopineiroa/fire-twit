@@ -47,5 +47,19 @@ export default function SignIn() {
     }
   }
 
-  return <>{loadingState || <button onClick={signIn}>Sign In</button>}</>;
+  return (
+    <>
+      {loadingState || (
+        <button
+          className="group m-4 rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+          onClick={signIn}
+        >
+          Continue With Github{" "}
+          <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+            -&gt;
+          </span>
+        </button>
+      )}
+    </>
+  );
 }
