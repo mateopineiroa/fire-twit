@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { auth } from "../lib/firebase-config";
 import { signOut } from "firebase/auth";
 
@@ -10,7 +11,5 @@ export async function signOutUser() {
     method: "POST",
   });
 
-  if (response.status === 200) {
-    console.log("logged out");
-  }
+  return response.status === 200;
 }

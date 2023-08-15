@@ -6,37 +6,46 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function SignIn() {
+  const [loadingState, setLoadingState] = useState("");
   const router = useRouter();
 
   useEffect(() => {
     const authenticate = async () => {
-      await getRedirectResult(auth).then(async (userCred) => {
-        if (!userCred) {
-          return;
-        }
+      try {
+        const userCred = await getRedirectResult(auth);
 
-        await fetch("http://localhost:3000/api/login", {
+        if (!userCred) return;
+        setLoadingState("Getting redirect data...");
+
+        const response = await fetch("/api/login", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${await userCred.user.getIdToken()}`,
           },
-        }).then((response) => {
-          if (response.status === 200) {
-            router.push("/protected");
-          }
         });
-      });
+
+        if (response.status === 200) {
+          setLoadingState("Done!");
+          router.push("/protected");
+        }
+      } catch (err) {
+        setLoadingState("getRedirectResult went wrong!");
+        console.log("getRedirectResult error", err);
+      }
     };
     authenticate();
   }, [router]);
 
-  function signIn() {
-    signInWithRedirect(auth, provider);
+  async function signIn() {
+    setLoadingState("redirecting...");
+    try {
+      await signInWithRedirect(auth, provider);
+    } catch (err) {
+      console.log("signInWithRedirect error", err);
+    } finally {
+      setLoadingState("redirected correctly!");
+    }
   }
 
-  return (
-    <>
-      <button onClick={() => signIn()}>Sign In</button>
-    </>
-  );
+  return <>{loadingState || <button onClick={signIn}>Sign In</button>}</>;
 }
