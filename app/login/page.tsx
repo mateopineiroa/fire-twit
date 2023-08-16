@@ -24,13 +24,12 @@ export default function SignIn() {
         },
       });
       if (response.status === 200) {
-        setLoadingState("Done!");
+        setLoadingState("Signed in correctly!");
         router.push("/protected");
       }
     } catch (err) {
       console.log("signInWithRedirect error", err);
-    } finally {
-      setLoadingState("redirected correctly!");
+      setLoadingState("Something went wrong");
     }
   }
 
